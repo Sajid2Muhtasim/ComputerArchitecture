@@ -158,11 +158,22 @@ Don't care conditions in a truth table can be used as either 0 or 1 in a K-Map t
 
 28 May, 2025
 
-CPU visual Simulator (expand on this)
+CPU visual Simulator
+
 
 This website simulates how a very basic CPU would work at a fundamental level. It visualizes the execution of simple machine code instructions showing how the data would flow in the CPU.
 
 From the simulation, I understood that at a fundamental level, there are three different buses that take the flow of data from and to the RAM and between the components of the CPU. The PC (program counter) is first taken to the address bus, and the data from this location is fetched on the control bus. This instruction is then loaded into the IR (instruction register) through the data bus. The upcode is then decoded by the Control Unit/Decoder. And then according to the instructions, the values are changed, operations are done, values are loaded, etc. in the other components of the CPU. Once the instructions are complete, the Program counter is incremented by 2, and the cycle repeats. 
+
+The Program Counter does not connect directly to the address bus. Instead, its value is first copied into the MAR. The MAR's only job is to hold the address of the memory location that the CPU wants to read from or write to. It decouples the CPU's internal operations from the memory bus, acting as a stable buffer for the memory address while the rest of the CPU prepares for the next step.
+These registers are essential for managing the timing and flow of a real CPU. They solve the problem of different components being ready at different times.
+
+
+Similarly, data does not flow directly from RAM to the Instruction Register. First it lands in the MDR. The MDR is a two way buffer. When reading from memory, data comes from RAM into the MDR. When writing to memory, data is put into the MDR before being sent to RAM.
+
+From experimenting on the website further, it seems the Control Unit is essentially a state machine that sends out these tiny control signals (_out, _in, _inc) in a precise sequence for every instruction.
+
+The ALU is where the if and while loops work at the hardware level. 
 
 The parts of the CPU include: 
 
@@ -173,6 +184,7 @@ Memory: This is where data and instructions are stored
 Control Unit: This is the part of the CPU that fetches instructions from memory, decodes them and then directs the operation of other components of the CPU
 
 Busses: These are what is used to transfer data and information between different components of the CPU
+
 
 
 
